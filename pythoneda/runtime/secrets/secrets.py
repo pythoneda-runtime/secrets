@@ -23,7 +23,7 @@ from pythoneda.shared import (
     listen,
     EventListener,
 )
-from pythoneda.runtime.events import (
+from pythoneda.shared.runtime.events import (
     CredentialIssued,
     CredentialProvided,
     CredentialRequested,
@@ -79,7 +79,7 @@ class Secrets(EventListener):
         """
         Gets notified of a CredentialIssued event.
         :param event: The event.
-        :type event: pythoneda.runtime.secrets.events.CredentialIssued
+        :type event: pythoneda.shared.secrets.events.CredentialIssued
         """
         Secrets.logger().info(f"Received {event}")
 
@@ -95,9 +95,9 @@ class Secrets(EventListener):
         """
         Gets notified of a CredentialRequested event.
         :param event: The event.
-        :type event: pythoneda.runtime.secrets.events.CredentialRequested
+        :type event: pythoneda.shared.secrets.events.CredentialRequested
         :return: A CredentialProvided event, or None if the credential is not available.
-        :rtype: pythoneda.runtime.secrets.events.CredentialProvided
+        :rtype: pythoneda.shared.secrets.events.CredentialProvided
         """
         result = None
 
