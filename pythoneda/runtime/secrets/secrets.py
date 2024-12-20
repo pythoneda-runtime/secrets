@@ -23,7 +23,7 @@ from pythoneda.shared import (
     listen,
     EventListener,
 )
-from pythoneda.shared.runtime.events import (
+from pythoneda.shared.runtime.secrets.events import (
     CredentialIssued,
     CredentialProvided,
     CredentialRequested,
@@ -79,25 +79,25 @@ class Secrets(EventListener):
         """
         Gets notified of a CredentialIssued event.
         :param event: The event.
-        :type event: pythoneda.shared.secrets.events.CredentialIssued
+        :type event: pythoneda.shared.runtime.secrets.events.CredentialIssued
         """
-        Secrets.logger().info(f"Received {event}")
-
         instance = cls.instance()
 
         instance._live_credentials[event.name] = event.value
 
+        Secrets.logger().info(f"Secret {event.name} set to {event.value}")
+
     @classmethod
     @listen(CredentialRequested)
-    async def listen_CredentialIssued(
+    async def listen_CredentialRequested(
         cls, event: CredentialRequested
     ) -> CredentialProvided:
         """
         Gets notified of a CredentialRequested event.
         :param event: The event.
-        :type event: pythoneda.shared.secrets.events.CredentialRequested
+        :type event: pythoneda.shared.runtime.secrets.events.CredentialRequested
         :return: A CredentialProvided event, or None if the credential is not available.
-        :rtype: pythoneda.shared.secrets.events.CredentialProvided
+        :rtype: pythoneda.shared.runtime.secrets.events.CredentialProvided
         """
         result = None
 
