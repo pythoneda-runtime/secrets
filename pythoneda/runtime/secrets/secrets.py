@@ -81,11 +81,7 @@ class Secrets(EventListener):
         :param event: The event.
         :type event: pythoneda.shared.runtime.secrets.events.CredentialIssued
         """
-        instance = cls.instance()
-
-        instance._live_credentials[event.name] = event.value
-
-        Secrets.logger().info(f"Secret {event.name} set to {event.value}")
+        cls.instance()._live_credentials[event.name] = event.value
 
     @classmethod
     @listen(CredentialRequested)
@@ -101,16 +97,17 @@ class Secrets(EventListener):
         """
         result = None
 
-        Secrets.logger().info(f"Received {event}")
-
         instance = cls.instance()
-
-        instance._live_credentials[event.name] = event.value
 
         credential = instance._live_credentials.get(event.name, None)
 
         if credential is not None:
-            result = CredentialProvided(event.name, credential)
+            result = CredentialProvided(
+                event.name,
+                credential,
+                event.metadata,
+                [event.id] + event.previous_event_ids,
+            )
 
         return result
 
